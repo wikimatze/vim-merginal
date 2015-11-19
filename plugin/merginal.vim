@@ -48,6 +48,24 @@ function! s:toggleBasedOnMergeMode() abort
     call s:openBasedOnMergeMode()
 endfunction
 
+function! s:openMerginalHelp()
+    if merginal#openTuiBuffer('Merginal:Help',get(a:000,1,bufwinnr('Merginal:')))
+
+        let @h=   "\" Merginal quickhelp\n"
+        let @h=@h."\" ===================\n"
+        let @h=@h."\" MerginalToggle: open/close window\n"
+        let @h=@h."\" MerginalClose: open/close window\n"
+        let @h=@h."\" Directory node mappings~\n"
+
+        setlocal modifiable
+        "Clear the buffer:
+        silent normal! gg"_dG
+        call setline(1, @h)
+    endif
+endfunction
+
 autocmd User Fugitive command! -buffer -nargs=0 Merginal call s:openBasedOnMergeMode()
+autocmd User Fugitive command! -buffer -nargs=0 MerginalHelp call s:openMerginalHelp()
 autocmd User Fugitive command! -buffer -nargs=0 MerginalToggle call s:toggleBasedOnMergeMode()
 autocmd User Fugitive command! -buffer -nargs=0 MerginalClose call merginal#closeMerginalBuffer()
+autocmd User Fugitive command! -buffer -nargs=0 MH call s:openMerginalHelp()
